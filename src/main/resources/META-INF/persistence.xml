@@ -1,0 +1,42 @@
+<!-- Copyright 2010-2016 Will Provost. All rights reserved by Capstone Courseware, 
+	LLC. -->
+
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+    http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+	version="2.1">
+
+	<persistence-unit name="PersistenceTest"
+		transaction-type="RESOURCE_LOCAL">
+		
+		<!-- By default, we let the classpath dictate the JPA provider. To force 
+			use of a specific provider, copy one of the elements below ant paste it just 
+			above this comment: EclipseLink: <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider> 
+			Hibernate: <provider>org.hibernate.ejb.HibernatePersistence</provider> -->
+
+		<class>magnuscapital.Trade</class>
+		<class>magnuscapital.Strategy</class>
+		
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+
+		<properties>
+		
+			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/> 
+       		
+        	<property name="javax.persistence.schema-generation.scripts.create-target" value="Create.ddl"/>
+        	<property name="javax.persistence.schema-generation.scripts.drop-target" value="Drop.ddl"/>
+		
+			<property name="javax.persistence.jdbc.driver"
+				value="oracle.jdbc.driver.OracleDriver" />
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:oracle:thin:@oracle.conygre.com:1521:xe" />
+			<property name="javax.persistence.jdbc.user" value="teamF" />
+			<property name="javax.persistence.jdbc.password"
+				value="MagnusCapital" />
+			<property name="eclipselink.logging.level" value="WARNING" />
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.Oracle10gDialect" />
+		</properties>
+	</persistence-unit>
+</persistence>

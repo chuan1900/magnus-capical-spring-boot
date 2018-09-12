@@ -1,0 +1,43 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jms="http://www.springframework.org/schema/jms" xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/jms 
+                           http://www.springframework.org/schema/jms/spring-jms.xsd
+                           http://activemq.apache.org/schema/core 
+                           http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+	<context:component-scan base-package="jms" />
+
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
+		p:brokerURL="tcp://activemq.conygre.com:61616" />
+
+	<bean id="messageSender" class="org.springframework.jms.core.JmsTemplate">
+		<constructor-arg name="connectionFactory" ref="connectionFactory"></constructor-arg>
+		<property name="defaultDestinationName" value="/dynamicQueues/test"></property>
+	</bean>
+	
+	<!-- A destination in ActiveMQ -->
+	<bean id="destination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="/dynamicQueues/test" />
+	</bean>
+	
+	<!-- A destination in ActiveMQ -->
+	<bean id="replyTo" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="/dynamicQueues/test" />
+	</bean>
+
+	<jms:listener-container container-type="default"
+		connection-factory="connectionFactory" acknowledge="auto">
+		<jms:listener destination="/dynamicQueues/test" ref="listener"
+			method="onMessage"></jms:listener>
+	</jms:listener-container>
+
+	<bean id="listener" class="jms.MessageHandler"></bean>
+
+
+</beans>
